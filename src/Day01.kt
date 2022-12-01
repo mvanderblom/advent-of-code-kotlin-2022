@@ -1,6 +1,8 @@
 fun main() {
     val dayName = 1.toDayName();
 
+    fun List<Int?>.total(): Int = this.filterNotNull().sum()
+
     fun getCaloriesPerElf(input: List<Int?>) = input
             .mapIndexedNotNull { index, calories ->
                 when {
@@ -10,14 +12,13 @@ fun main() {
                 }
             }
             .windowed(2, 1)
-            .map { (from, to) -> input.subList(from, to).filterNotNull() }
-            .map { it.sum() }
-            .sortedDescending()
+            .map { (from, to) -> input.subList(from, to).total() }
 
     fun part1(input: List<Int?>): Int = getCaloriesPerElf(input)
             .max()
 
     fun part2(input: List<Int?>): Int = getCaloriesPerElf(input)
+            .sortedDescending()
             .subList(0,3)
             .sum()
 
