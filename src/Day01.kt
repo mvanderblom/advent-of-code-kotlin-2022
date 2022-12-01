@@ -1,16 +1,25 @@
 fun main() {
-    val dayName = "Day01"
+    val dayName = 1.toDayName();
 
-
-    fun part1(input: List<Int?>): Int = input
+    fun getCaloriesPerElf(input: List<Int?>) = input
             .mapIndexedNotNull { index, calories ->
-                if (index == 0 || index == input.size - 1 || calories == null) index else null
+                when {
+                    (index == 0 || calories == null) -> index
+                    (index == input.size - 1) -> input.size
+                    else -> null
+                }
             }
             .windowed(2, 1)
-            .print()
-            .maxOf { (from, to) -> input.subList(from, to).filterNotNull().sum() }
+            .map { (from, to) -> input.subList(from, to).filterNotNull() }
+            .map { it.sum() }
+            .sortedDescending()
 
-    fun part2(input: List<Int?>): Int = input.size
+    fun part1(input: List<Int?>): Int = getCaloriesPerElf(input)
+            .max()
+
+    fun part2(input: List<Int?>): Int = getCaloriesPerElf(input)
+            .subList(0,3)
+            .sum()
 
     val testInput = readInput("${dayName}_test")
             .map { it.toIntOrNull() }
@@ -25,8 +34,8 @@ fun main() {
     outputPart1 isEqualTo 69795
 
     val testOutputPart2 = part2(testInput)
-    testOutputPart2 isEqualTo null
+    testOutputPart2 isEqualTo 45000
 
     val outputPart2 = part2(input)
-    outputPart2 isEqualTo null
+    outputPart2 isEqualTo 208437
 }

@@ -17,7 +17,7 @@ fun String.md5() = BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteA
 
 infix fun Any.isEqualTo(expected: Any?): Boolean {
     if (expected == null) {
-        error("Expectation not set...")
+        error("Expectation not set... Actual was $this")
     }
 
     if (!this.equals(expected)) {
@@ -27,7 +27,14 @@ infix fun Any.isEqualTo(expected: Any?): Boolean {
     return true
 }
 
-fun <T> T.print(): T {
+fun <T> T.showMe(prefix: String? = null): T {
+    if(prefix != null) {
+        print(prefix)
+        print(" ")
+    }
     println(this)
+
     return this;
 }
+
+fun Int.toDayName(): String = "Day" + this.toString().padStart(2, '0')
