@@ -1,16 +1,14 @@
+fun String.intersect(other: String): Set<Char> = this.toSet().intersect(other.toSet())
+fun String.inHalf(): Pair<String, String> = this.substring(0, this.length/2) to  this.substring(this.length/2, this.length)
+
+val allLetters = ('a'..'z') + ('A'..'Z')
+fun getPriority(c: Char?): Int = allLetters.indexOf(c) + 1
 
 fun main() {
     val dayName = 3.toDayName()
 
-    fun split(it: String): Pair<String, String> = it.substring(0, it.length/2) to  it.substring(it.length/2, it.length)
-
-    fun String.intersect(other: String): Set<Char> = this.toSet().intersect(other.toSet())
-
-    val allLetters = ('a'..'z') + ('A'..'Z')
-    fun getPriority(c: Char?): Int = allLetters.indexOf(c) + 1
-
     fun part1(input: List<String>): Int = input
-            .map(::split)
+            .map { it.inHalf()}
             .map { (a, b) -> a.intersect(b).single() }
             .map(::getPriority)
             .sum()
