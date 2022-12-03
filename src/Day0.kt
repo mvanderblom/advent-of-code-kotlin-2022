@@ -1,5 +1,5 @@
 fun main() {
-    val dayName = 0.toDayName();
+    val dayName = 0.toDayName()
 
     fun part1(input: List<String>): Int = input.size
 

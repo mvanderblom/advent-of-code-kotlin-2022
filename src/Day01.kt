@@ -1,5 +1,5 @@
 fun main() {
-    val dayName = 1.toDayName();
+    val dayName = 1.toDayName()
 
     fun List<Int?>.total(): Int = this.filterNotNull().sum()
 
