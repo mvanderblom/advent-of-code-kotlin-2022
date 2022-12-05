@@ -40,4 +40,11 @@ fun <T> T.showMe(prefix: String? = null): T {
     return this
 }
 
+fun <T> List<T>.showMe(func: (input: T) -> Any): List<T> {
+    this.forEach {
+        println(func(it))
+    }
+    return this
+}
+
 fun Int.toDayName(): String = "Day" + this.toString().padStart(2, '0')
