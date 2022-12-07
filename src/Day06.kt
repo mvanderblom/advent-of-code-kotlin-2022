@@ -6,7 +6,7 @@ fun main() {
             .indexOfFirst { it.toSet().size == windowSize } + windowSize
 
     val testInput = "mjqjpqmgbljsphdztnvjfqwrcgsmlb"
-    val input = readInput(dayName).get(0)
+    val input = readInput(dayName)[0]
 
     // Part 1
 
