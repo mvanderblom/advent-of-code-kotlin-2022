@@ -25,6 +25,21 @@ fun main() {
             -2 to 1 to listOf("L", "U")
     )
 
+    fun display(width: Int, height: Int, arr: Array<Pair<Int,Int>>) {
+        repeat(height) {y ->
+            repeat(width) {x ->
+                val coord = x to (height-y)
+                when {
+                    arr[0] == coord -> print("H")
+                    arr.last() == coord -> print("T")
+                    arr.contains(coord) -> print("o")
+                    else -> print(".")
+                }
+            }
+            println()
+        }
+        println()
+    }
 
     fun getMoves(input: List<String>) = input
             .map { it.split(" ") }
@@ -52,17 +67,67 @@ fun main() {
         return tailPositions.toSet().size
     }
 
-    fun part2(input: List<String>): Int = input.size
+    fun follow(head: Pair<Int, Int>, tail: List<Pair<Int, Int>>): List<Pair<Int, Int>> {
+
+        val distance = head - tail[0]
+        if (abs(distance.first) >= 2 || abs(distance.second) >= 2) {
+            println("head moved to $head, moving tail by $distance")
+            val tailPath = tailMovesByDistance.getValue(distance)
+                    .map { moves.getValue(it)(tail[0]) }
+            if( tail.size == 1 )
+                return tailPath
+        }
+        return follow(tail[0], tail.subList(1, tail.size))
+    }
+
+    fun part2(input: List<String>): Int {
+        val instructions = input
+                .map { it.split(" ") }
+                .map { (direction, amount) -> direction to amount.toInt() }
+
+        val tailPath = mutableListOf<Pair<Int, Int>>()
+
+        val rope = Array(10) { Pair(15,15) }
+        display(25, 25, rope)
+        instructions.forEach { (direction, amount) ->
+            println("$direction $amount")
+            repeat(amount) {
+                rope[0] = moves.getValue(direction)(rope[0])
+                (0 until rope.size - 1).forEach { i ->
+                    val head = rope[i]
+                    val tail = rope[i + 1]
+                    val distance = head - tail
+
+                    if (abs(distance.first) >= 2 || abs(distance.second) >= 2) {
+                        val path = tailMovesByDistance
+                                .getValue(distance)
+                                .map {
+                                    val newPosition = moves.getValue(it)(tail)
+                                    rope[i+1] = newPosition
+                                    newPosition
+                                }
+                        if(i == rope.size - 2) {
+                            tailPath.addAll(path)
+                        }
+                    }
+                }
+                display(25, 25, rope)
+            }
+        }
+
+
+        return 1
+    }
 
     val input = readInput(dayName)
 
     // Part 1
 
-    val testOutputPart1 = part1(readInput("${dayName}_test"))
-    testOutputPart1 isEqualTo 13
-
-    val outputPart1 = part1(input)
-    outputPart1 isEqualTo 6044
+//    val testOutputPart1 = part1(readInput("${dayName}_test"))
+//    testOutputPart1 isEqualTo 13
+//
+//    val outputPart1 = part1(input)
+//    outputPart1 isEqualTo 6044
 
     // Part 2
 
